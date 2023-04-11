@@ -14,15 +14,21 @@ import androidx.compose.ui.tooling.preview.Preview
 import com.example.foodrecipeapp.network.responses.RecipeService
 import com.example.foodrecipeapp.ui.theme.FoodRecipeAppTheme
 import com.google.gson.GsonBuilder
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers.IO
 import kotlinx.coroutines.launch
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
+import javax.inject.Inject
 
+@AndroidEntryPoint
 class MainActivity : ComponentActivity() {
+    @Inject
+    lateinit var someRandomString:String
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        Log.d("APP_DEBUG", "onCreate: $someRandomString")
         val service = Retrofit.Builder()
             .baseUrl("https://food2fork.ca/api/recipe/")
             .addConverterFactory(GsonConverterFactory.create(GsonBuilder().create()))
