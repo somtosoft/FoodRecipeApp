@@ -4,7 +4,7 @@ import com.example.foodrecipeapp.network.model.RecipeDto
 import retrofit2.http.GET
 import retrofit2.http.Header
 import retrofit2.http.Query
-interface RecipeRetrofitService {
+interface RecipeService {
 //    Search for recipes
     @GET("search")
     suspend fun search(
