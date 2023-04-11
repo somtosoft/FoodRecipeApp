@@ -11,7 +11,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
-import com.example.foodrecipeapp.network.responses.RecipeRetrofitService
+import com.example.foodrecipeapp.network.responses.RecipeService
 import com.example.foodrecipeapp.ui.theme.FoodRecipeAppTheme
 import com.google.gson.GsonBuilder
 import kotlinx.coroutines.CoroutineScope
@@ -27,7 +27,7 @@ class MainActivity : ComponentActivity() {
             .baseUrl("https://food2fork.ca/api/recipe/")
             .addConverterFactory(GsonConverterFactory.create(GsonBuilder().create()))
             .build()
-            .create(RecipeRetrofitService::class.java)
+            .create(RecipeService::class.java)
         CoroutineScope(IO).launch {
             val recipe = service.get(
                 token = "Token 9c8b06d329136da358c2d00e76946b0111ce2c48",
