@@ -21,6 +21,7 @@ constructor(
     private val recipeRepository: RecipeRepository,
     @Named("auth_token") private val token: String
 ) : ViewModel() {
+    val loading :MutableState<Boolean> = mutableStateOf(false)
     val recipes: MutableState<List<Recipe>> = mutableStateOf(listOf())
     val query = mutableStateOf("")
     val
@@ -31,6 +32,8 @@ constructor(
     }
 
     fun newSearch() {
+        loading.value = true
+        resetSearchState()
         viewModelScope.launch {
             val result = recipeRepository.search(
                 token = token,
@@ -38,7 +41,18 @@ constructor(
                 query = query.value
             )
             recipes.value = result
+            loading.value = false
         }
+    }
+    private fun resetSearchState() {
+        recipes.value = listOf()
+        if (selectedCategory.value?.value != query.value) {
+            clearSelectedCategory()
+        }
+    }
+
+    private fun clearSelectedCategory() {
+        selectedCategory.value = null
     }
 
     fun onQueryChanged(query: String) {
