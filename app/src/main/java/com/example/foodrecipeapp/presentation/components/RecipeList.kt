@@ -16,6 +16,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.navigation.NavController
 import com.example.foodrecipeapp.R
 import com.example.foodrecipeapp.domain.model.Recipe
+import com.example.foodrecipeapp.presentation.navigation.Screen
 import com.example.foodrecipeapp.presentation.ui.recipe_list.PAGE_SIZE
 import com.example.foodrecipeapp.presentation.ui.recipe_list.RecipeListEvent
 
@@ -27,7 +28,7 @@ fun RecipeList(
     onChangeRecipeScrollPosition: (Int) -> Unit,
     onNextPage:(RecipeListEvent) -> Unit,
     paddingValues: PaddingValues,
-    navController: NavController
+    onNavigateToRecipeDetailScreen: (String)-> Unit
 
 ) {
     val context = LocalContext.current
@@ -46,13 +47,8 @@ fun RecipeList(
                 }
                 RecipeCard(recipe = recipe,
                     onClick = {
-                    if(recipe.id != null) {
-                        val bundle = Bundle()
-                        bundle.putInt("recipeId", recipe.id)
-                        navController.navigate(R.id.viewRecipe, bundle)
-                    }else{
-                        Toast.makeText(context, "Error", Toast.LENGTH_SHORT).show()
-                    }
+                        val route = Screen.RecipeDetail.route + "/${recipe.id}"
+                        onNavigateToRecipeDetailScreen(route)
                 }
                 )
             }

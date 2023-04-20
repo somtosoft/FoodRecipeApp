@@ -17,7 +17,7 @@ import javax.inject.Named
 const val STATE_KEY_RECIPE = "state.key.recipeId"
 
 @HiltViewModel
-class RecipeViewModel
+class RecipeDetailViewModel
 @Inject
 constructor(
     private val recipeRepository: RecipeRepository,
@@ -26,6 +26,7 @@ constructor(
 ) : ViewModel() {
     val recipe: MutableState<Recipe?> = mutableStateOf(null)
     val loading: MutableState<Boolean> = mutableStateOf(false)
+    val onLoad : MutableState<Boolean> = mutableStateOf(false)
 
     init {
         savedStateHandle.get<Int>(STATE_KEY_RECIPE)?.let { rId ->

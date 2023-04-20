@@ -74,9 +74,8 @@ dependencies {
     def nav_version = "2.5.3"
     implementation "androidx.navigation:navigation-compose:$nav_version"
     implementation "androidx.navigation:navigation-runtime-ktx:$nav_version"
-    implementation "androidx.navigation:navigation-ui-ktx:$nav_version"
-    implementation "androidx.navigation:navigation-fragment-ktx:$nav_version"
 
+    implementation("androidx.hilt:hilt-navigation-fragment:1.0.0")
 
 //    retrofit dependencies
     def retrofit_version = "2.9.0"
@@ -103,7 +102,15 @@ dependencies {
     def appcompat_version = "1.6.1"
     implementation "androidx.appcompat:appcompat:$appcompat_version"
 
-    implementation("androidx.hilt:hilt-navigation-fragment:1.0.0")
+// room dependencies
+    def room_version = "2.5.1"
+
+    implementation("androidx.room:room-runtime:$room_version")
+    annotationProcessor("androidx.room:room-compiler:$room_version")
+// optional - Kotlin Extensions and Coroutines support for Room
+    implementation("androidx.room:room-ktx:$room_version")
+    // optional - Test helpers
+    testImplementation("androidx.room:room-testing:$room_version")
 
 
 }
