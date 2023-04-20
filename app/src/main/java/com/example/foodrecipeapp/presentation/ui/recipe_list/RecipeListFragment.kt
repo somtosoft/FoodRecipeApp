@@ -4,30 +4,30 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.compose.foundation.horizontalScroll
-import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.itemsIndexed
-import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.text.KeyboardActions
-import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Search
+import androidx.compose.material.icons.filled.Favorite
 import androidx.compose.material3.*
-import androidx.compose.ui.Modifier
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.platform.ComposeView
-import androidx.compose.ui.text.input.ImeAction
-import androidx.compose.ui.text.input.KeyboardType
 import androidx.fragment.app.Fragment
-import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.fragment.hiltNavGraphViewModels
+import androidx.navigation.fragment.findNavController
 import com.example.foodrecipeapp.R
-import com.example.foodrecipeapp.presentation.components.CircularIndeterminateProgressBar
-import com.example.foodrecipeapp.presentation.components.FoodCategoryChip
-import com.example.foodrecipeapp.presentation.components.RecipeCard
-import com.example.foodrecipeapp.presentation.components.SearchAppBar
+import com.example.foodrecipeapp.presentation.BaseApplication
+import com.example.foodrecipeapp.presentation.components.*
+import com.example.foodrecipeapp.presentation.ui.recipe_list.RecipeListEvent.*
+import com.example.foodrecipeapp.ui.theme.FoodRecipeAppTheme
+import dagger.hilt.android.AndroidEntryPoint
+import javax.inject.Inject
 
+@AndroidEntryPoint
 class RecipeListFragment : Fragment() {
+
+    @Inject
+    lateinit var application: BaseApplication
+
     private val viewModel: RecipeListViewModel by hiltNavGraphViewModels(R.id.main_graph)
 
     override fun onCreateView(
@@ -38,34 +38,68 @@ class RecipeListFragment : Fragment() {
 
         return ComposeView(requireContext()).apply {
             setContent {
-                val recipes = viewModel.recipes.value
 
-                val query = viewModel.query.value
-                val selectedCategory = viewModel.selectedCategory.value
-                val loading = viewModel.loading.value
-                Column {
-                    SearchAppBar(
-                        query = query,
-                        onQueryChanged = viewModel::onQueryChanged,
-                        onExecuteSearch = viewModel::newSearch,
-                        selectedCategory = selectedCategory,
-                        onSelectedCategoryChanged = viewModel::onSelectedCategoryChanged,
+                FoodRecipeAppTheme(darkTheme = application.isDark.value) {
+                    val recipes = viewModel.recipes.value
+                    val query = viewModel.query.value
+                    val selectedCategory = viewModel.selectedCategory.value
+                    val loading = viewModel.loading.value
+                    val page = viewModel.page.value
 
-                        )
+                    Scaffold(
+                        topBar = {
+                            SearchAppBar(
+                                query = query,
+                                onQueryChanged = viewModel::onQueryChanged,
+                                onExecuteSearch = { viewModel.onTriggerEvent(NewSearchEvent) },
+                                selectedCategory = selectedCategory,
+                                onSelectedCategoryChanged = viewModel::onSelectedCategoryChanged,
+                                onToggleTheme = {
+                                    application.toggleLightTheme()
+                                },
+                                isDarktheme = application.isDark.value
 
-                   Box(){
-                       LazyColumn {
-                           itemsIndexed(items = recipes) { index, recipe ->
-                               RecipeCard(recipe = recipe, onClick = { })
-                           }
-                       }
-                       CircularIndeterminateProgressBar(isDisplayed=loading)
-                   }
+                            )
+                        },
+                        bottomBar = {
+                            BottomBar()
+                        },
+
+                        ) {
+                       RecipeList(
+                           loading = loading,
+                           page = page,
+                           recipes = recipes,
+                           onChangeRecipeScrollPosition = viewModel::onChangeRecipeScrollPosition,
+                           onNextPage = {viewModel.onTriggerEvent(NextPageEvent)},
+                           paddingValues = it,
+                           navController = findNavController()
+                       )
+                    }
+
+
                 }
 
             }
 
         }
 
+    }
+}
+
+@Composable
+fun BottomBar() {
+    val selectedItem = remember { mutableStateOf(0) }
+    val items = listOf("Songs", "Artists", "Playlists")
+
+    NavigationBar {
+        items.forEachIndexed { index, item ->
+            NavigationBarItem(
+                icon = { Icon(Icons.Filled.Favorite, contentDescription = item) },
+                label = { Text(item) },
+                selected = selectedItem.value == index,
+                onClick = { selectedItem.value = index }
+            )
+        }
     }
 }

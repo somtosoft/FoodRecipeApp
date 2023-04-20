@@ -1,5 +1,6 @@
 package com.example.foodrecipeapp.presentation.components
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
@@ -7,12 +8,16 @@ import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Search
+import androidx.compose.material.icons.rounded.Check
+import androidx.compose.material.icons.rounded.ShoppingCart
 import androidx.compose.material3.*
-import androidx.compose.runtime.Composable
+import androidx.compose.runtime.*
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
+import androidx.constraintlayout.widget.ConstraintLayout
 import com.example.foodrecipeapp.presentation.ui.recipe_list.FoodCategory
 import com.example.foodrecipeapp.presentation.ui.recipe_list.getAllFoodCategories
 
@@ -23,18 +28,23 @@ fun SearchAppBar(
     onExecuteSearch: () -> Unit,
     selectedCategory: FoodCategory?,
     onSelectedCategoryChanged: (String) -> Unit,
+    onToggleTheme: () -> Unit,
+    isDarktheme:Boolean
 ) {
+
+
     Surface(
         shadowElevation = 8.dp,
         modifier = Modifier.fillMaxWidth(),
-//        color = MaterialTheme.colorScheme.primary,
+        color = MaterialTheme.colorScheme.surface,
+
 
         ) {
         Column {
             Row(modifier = Modifier.fillMaxWidth()) {
                 TextField(
                     modifier = Modifier
-                        .fillMaxWidth(0.9f)
+                        .fillMaxWidth(0.8f)
                         .padding(8.dp),
                     value = query,
                     onValueChange = { newValue ->
@@ -61,6 +71,27 @@ fun SearchAppBar(
                         },
                     )
                 )
+//                theme toggle switch
+
+                Row(modifier= Modifier
+                    .fillMaxWidth(),
+                    horizontalArrangement = Arrangement.Center,
+                    verticalAlignment = Alignment.CenterVertically
+
+                ){
+
+                    Switch(
+
+                        checked =  isDarktheme,
+                        onCheckedChange = { onToggleTheme() },
+                        thumbContent = {
+                            Icon(
+                                Icons.Rounded.Check,
+                                contentDescription = "Check Cart"
+                            )
+                        },
+                    )
+                }
             }
 
             Row(
