@@ -1,4 +1,4 @@
-package com.example.foodrecipeapp.util.database
+package com.example.foodrecipeapp.cache.database
 
 import androidx.room.Database
 import androidx.room.RoomDatabase
@@ -9,6 +9,6 @@ import com.example.foodrecipeapp.cache.model.RecipeEntity
 abstract class AppDataBase:RoomDatabase(){
     abstract fun recipeDao(): RecipeDao
     companion object {
-        val DATABASE_NAME:String = "recipes_db"
+        val DATABASE_NAME:String = "recipe_db"
     }
 }

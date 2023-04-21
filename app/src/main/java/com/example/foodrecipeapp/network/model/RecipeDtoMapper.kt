@@ -2,6 +2,7 @@ package com.example.foodrecipeapp.network.model
 
 import com.example.foodrecipeapp.domain.model.Recipe
 import com.example.foodrecipeapp.domain.util.DomainMapper
+import com.example.foodrecipeapp.util.DateUtils
 
 class RecipeDtoMapper:DomainMapper<RecipeDto, Recipe> {
 
@@ -13,11 +14,9 @@ class RecipeDtoMapper:DomainMapper<RecipeDto, Recipe> {
             rating = model.rating,
             publisher = model.publisher,
             sourceUrl = model.sourceUrl,
-            description = model.description,
-            cookingInstructions = model.cookingInstructions,
             ingredients = model.ingredients.orEmpty(),
-            dateAdded = model.dateAdded,
-            dateUpdated = model.dateUpdated,
+            dateAdded = DateUtils.longToDate(model.longDateAdded),
+            dateUpdated = DateUtils.longToDate(model.longDateUpdated)
         )
     }
 
@@ -29,11 +28,9 @@ class RecipeDtoMapper:DomainMapper<RecipeDto, Recipe> {
             rating = domainModel.rating,
             publisher = domainModel.publisher,
             sourceUrl = domainModel.sourceUrl,
-            description = domainModel.description,
-            cookingInstructions = domainModel.cookingInstructions,
             ingredients = domainModel.ingredients,
-            dateAdded = domainModel.dateAdded,
-            dateUpdated = domainModel.dateUpdated,
+            longDateAdded = DateUtils.dateToLong(domainModel.dateAdded),
+            longDateUpdated = DateUtils.dateToLong(domainModel.dateUpdated),
         )
     }
 

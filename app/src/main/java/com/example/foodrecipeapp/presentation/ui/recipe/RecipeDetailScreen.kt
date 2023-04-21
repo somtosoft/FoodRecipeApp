@@ -1,6 +1,5 @@
 package com.example.foodrecipeapp.presentation.ui.recipe
 
-import android.util.Log
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
@@ -11,27 +10,27 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import com.example.foodrecipeapp.presentation.components.CircularIndeterminateProgressBar
 import com.example.foodrecipeapp.presentation.components.RecipeView
-import com.example.foodrecipeapp.ui.theme.FoodRecipeAppTheme
+import com.example.foodrecipeapp.presentation.theme.FoodRecipeAppTheme
 
 @Composable
 fun RecipeDetailScreen(
-    isDarkTheme:Boolean,
-    recipeId:Int,
-    viewModel:RecipeDetailViewModel,
+    isDarkTheme: Boolean,
+    recipeId: Int,
+    viewModel: RecipeDetailViewModel,
 ) {
 
-    if(recipeId == null){
+    if (recipeId == null) {
         Text(text = "Error retrieving recipe")
-    }else{
+    } else {
         val onLoad = viewModel.onLoad.value
-        if (!onLoad){
+        if (!onLoad) {
             viewModel.onLoad.value = true
             viewModel.onTriggerEvent(RecipeEvent.GetRecipeEvent(recipeId))
         }
         val loading = viewModel.loading.value
         val recipe = viewModel.recipe.value
-
-        FoodRecipeAppTheme(darkTheme = isDarkTheme) {
+        val dialogQueue = viewModel.dialogQueue
+        FoodRecipeAppTheme(darkTheme = isDarkTheme, dialogQueue = dialogQueue.queue.value) {
             Scaffold {
                 Box(
                     modifier = Modifier

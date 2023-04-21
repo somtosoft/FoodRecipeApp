@@ -3,6 +3,7 @@ package com.example.foodrecipeapp.presentation.ui.recipe_list
 import com.example.foodrecipeapp.presentation.ui.recipe_list.FoodCategory.*
 
 enum class FoodCategory(val value: String) {
+    ERROR("error"),
     CHICKEN("Chicken"),
     BEEF("Beef"),
     SOUP("Soup"),
@@ -16,7 +17,7 @@ enum class FoodCategory(val value: String) {
 
 fun getAllFoodCategories(): List<FoodCategory> {
 
-    return listOf(CHICKEN, BEEF, SOUP, DESSERT, VEGETARIAN, MILK, VEGAN, PIZZA, DONUT)
+    return listOf(ERROR,CHICKEN, BEEF, SOUP, DESSERT, VEGETARIAN, MILK, VEGAN, PIZZA, DONUT)
 
 }
 

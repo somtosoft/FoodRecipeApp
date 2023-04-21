@@ -2,8 +2,9 @@ package com.example.foodrecipeapp.di
 
 import androidx.room.Room
 import com.example.foodrecipeapp.cache.RecipeDao
+import com.example.foodrecipeapp.cache.model.RecipeEntityMapper
 import com.example.foodrecipeapp.presentation.BaseApplication
-import com.example.foodrecipeapp.util.database.AppDataBase
+import com.example.foodrecipeapp.cache.database.AppDataBase
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -30,5 +31,11 @@ object CacheModule {
     @Provides
     fun provideRecipeDao(db: AppDataBase): RecipeDao {
         return db.recipeDao()
+    }
+
+    @Singleton
+    @Provides
+    fun provideCacheRecipeMapper(): RecipeEntityMapper {
+        return RecipeEntityMapper()
     }
 }

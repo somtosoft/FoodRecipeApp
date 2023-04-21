@@ -25,11 +25,11 @@ data class RecipeEntity(
     @ColumnInfo(name = "source_url")
     val sourceUrl: String,
 
-    @ColumnInfo(name = "description")
-    val description: String,
-
-    @ColumnInfo(name = "cooking_instructions")
-    val cookingInstructions: String,
+//    @ColumnInfo(name = "description")
+//    val description: String,
+//
+//    @ColumnInfo(name = "cooking_instructions")
+//    val cookingInstructions: String,
 
     @ColumnInfo(name= "ingredients")
     val ingredients: String,
@@ -40,6 +40,6 @@ data class RecipeEntity(
     @ColumnInfo(name = "date_updated")
     val dateUpdated: Long,
 
-    @ColumnInfo(name = "date_refreshed")
-    val dateRefreshed: Long,
+    @ColumnInfo(name = "date_cached")
+    val dateCached: Long,
 )

@@ -7,25 +7,26 @@ import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.navigation.fragment.findNavController
 import com.example.foodrecipeapp.presentation.components.RecipeList
 import com.example.foodrecipeapp.presentation.components.SearchAppBar
-import com.example.foodrecipeapp.ui.theme.FoodRecipeAppTheme
+import com.example.foodrecipeapp.presentation.theme.FoodRecipeAppTheme
 
 @Composable
 fun RecipeListScreen(
-    isDarkTheme:Boolean,
+    isDarkTheme: Boolean,
     onToggleTheme: () -> Unit,
     onNavigateToRecipeDetailScreen: (String) -> Unit,
     viewModel: RecipeListViewModel,
 ) {
-    FoodRecipeAppTheme(darkTheme = isDarkTheme) {
+    val dialogQueue = viewModel.dialogQueue
+    val recipes = viewModel.recipes.value
+    val query = viewModel.query.value
+    val selectedCategory = viewModel.selectedCategory.value
+    val loading = viewModel.loading.value
+    val page = viewModel.page.value
+    FoodRecipeAppTheme(darkTheme = isDarkTheme, dialogQueue = dialogQueue.queue.value) {
         Log.d("RecipeListScreen", "RecipeListScreen: $viewModel")
-        val recipes = viewModel.recipes.value
-        val query = viewModel.query.value
-        val selectedCategory = viewModel.selectedCategory.value
-        val loading = viewModel.loading.value
-        val page = viewModel.page.value
+
 
         Scaffold(
             topBar = {
@@ -52,7 +53,7 @@ fun RecipeListScreen(
                 page = page,
                 recipes = recipes,
                 onChangeRecipeScrollPosition = viewModel::onChangeRecipeScrollPosition,
-                onNextPage = {viewModel.onTriggerEvent(RecipeListEvent.NextPageEvent)},
+                onNextPage = { viewModel.onTriggerEvent(RecipeListEvent.NextPageEvent) },
                 paddingValues = it,
                 onNavigateToRecipeDetailScreen = onNavigateToRecipeDetailScreen
 
@@ -63,6 +64,7 @@ fun RecipeListScreen(
 
     }
 }
+
 @Composable
 fun BottomBar() {
     val selectedItem = remember { mutableStateOf(0) }
