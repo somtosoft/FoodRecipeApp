@@ -15,6 +15,7 @@ import com.example.foodrecipeapp.presentation.theme.FoodRecipeAppTheme
 @Composable
 fun RecipeDetailScreen(
     isDarkTheme: Boolean,
+    isNetworkAvailable:Boolean,
     recipeId: Int,
     viewModel: RecipeDetailViewModel,
 ) {
@@ -30,7 +31,7 @@ fun RecipeDetailScreen(
         val loading = viewModel.loading.value
         val recipe = viewModel.recipe.value
         val dialogQueue = viewModel.dialogQueue
-        FoodRecipeAppTheme(darkTheme = isDarkTheme, dialogQueue = dialogQueue.queue.value) {
+        FoodRecipeAppTheme(darkTheme = isDarkTheme, isNetworkAvailable=isNetworkAvailable,dialogQueue = dialogQueue.queue.value) {
             Scaffold {
                 Box(
                     modifier = Modifier

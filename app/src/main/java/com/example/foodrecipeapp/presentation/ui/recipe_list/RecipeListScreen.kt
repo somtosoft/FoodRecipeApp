@@ -14,6 +14,7 @@ import com.example.foodrecipeapp.presentation.theme.FoodRecipeAppTheme
 @Composable
 fun RecipeListScreen(
     isDarkTheme: Boolean,
+    isNetworkAvailable: Boolean,
     onToggleTheme: () -> Unit,
     onNavigateToRecipeDetailScreen: (String) -> Unit,
     viewModel: RecipeListViewModel,
@@ -24,7 +25,11 @@ fun RecipeListScreen(
     val selectedCategory = viewModel.selectedCategory.value
     val loading = viewModel.loading.value
     val page = viewModel.page.value
-    FoodRecipeAppTheme(darkTheme = isDarkTheme, dialogQueue = dialogQueue.queue.value) {
+    FoodRecipeAppTheme(
+        darkTheme = isDarkTheme,
+        isNetworkAvailable = isNetworkAvailable,
+        dialogQueue = dialogQueue.queue.value
+    ) {
         Log.d("RecipeListScreen", "RecipeListScreen: $viewModel")
 
 

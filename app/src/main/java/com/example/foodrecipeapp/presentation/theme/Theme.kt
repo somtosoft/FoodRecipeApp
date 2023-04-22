@@ -7,6 +7,7 @@ import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
+import com.example.foodrecipeapp.presentation.components.ConnectivityMonitor
 import com.example.foodrecipeapp.presentation.components.GenericDialog
 import com.example.foodrecipeapp.presentation.components.GenericDialogInfo
 import java.util.*
@@ -80,6 +81,7 @@ private val DarkColors = darkColorScheme(
 @Composable
 fun FoodRecipeAppTheme(
     darkTheme: Boolean = isSystemInDarkTheme(),
+    isNetworkAvailable:Boolean,
     dynamicColor: Boolean = false, // Dynamic color is available on Android 12+
     dialogQueue: Queue<GenericDialogInfo>,
     content: @Composable () -> Unit,
@@ -100,7 +102,10 @@ fun FoodRecipeAppTheme(
     ) {
         val openDialog = remember { mutableStateOf(true) }
         Box(modifier = Modifier.fillMaxSize()) {
-            content()
+            Column {
+                ConnectivityMonitor(isNetworkAvailable =isNetworkAvailable)
+                content()
+            }
             ProcessDialogQueue(dialogQueue = dialogQueue)
         }
     }

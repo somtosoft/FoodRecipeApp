@@ -10,6 +10,7 @@ import com.example.foodrecipeapp.domain.model.Recipe
 import com.example.foodrecipeapp.interactors.recipe.GetRecipe
 import com.example.foodrecipeapp.presentation.ui.recipe.RecipeEvent.GetRecipeEvent
 import com.example.foodrecipeapp.presentation.ui.util.DialogQueue
+import com.example.foodrecipeapp.presentation.util.InternetConnectivityManager
 import com.example.foodrecipeapp.util.TAG
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.delay
@@ -27,7 +28,8 @@ class RecipeDetailViewModel
 constructor(
     private val getRecipe: GetRecipe,
     @Named("auth_token") private val token: String,
-    private val savedStateHandle: SavedStateHandle
+    private val savedStateHandle: SavedStateHandle,
+    private val internetConnectivityManager: InternetConnectivityManager,
 ) : ViewModel() {
     val recipe: MutableState<Recipe?> = mutableStateOf(null)
     val loading: MutableState<Boolean> = mutableStateOf(false)
@@ -57,7 +59,7 @@ constructor(
     }
 
     private fun getRecipe(id: Int) {
-        getRecipe.execute(id, token).onEach { dataState ->
+        getRecipe.execute(id, token,internetConnectivityManager.isNetworkAvailable.value).onEach { dataState ->
             loading.value = dataState.loading
             dataState.data?.let { data ->
                 recipe.value = data

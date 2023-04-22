@@ -9,6 +9,7 @@ import com.example.foodrecipeapp.domain.model.Recipe
 import com.example.foodrecipeapp.interactors.recipe_list.RestoreRecipes
 import com.example.foodrecipeapp.presentation.ui.recipe_list.RecipeListEvent.*
 import com.example.foodrecipeapp.presentation.ui.util.DialogQueue
+import com.example.foodrecipeapp.presentation.util.InternetConnectivityManager
 import com.example.foodrecipeapp.util.TAG
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.delay
@@ -30,6 +31,7 @@ class RecipeListViewModel
 constructor(
     private val searchRecipes: SearchRecipes,
     private val restoreRecipes: RestoreRecipes,
+    private val internetConnectivityManager: InternetConnectivityManager,
     @Named("auth_token") private val token: String,
     private val savedStateHandle: SavedStateHandle
 ) : ViewModel() {
@@ -104,7 +106,7 @@ constructor(
     private fun newSearch() {
         Log.d(TAG, "newSearch: query: ${query.value}, page: ${page.value}")
         resetSearchState()
-        searchRecipes.execute(token = token, page = page.value, query = query.value)
+        searchRecipes.execute(token = token, page = page.value, query = query.value, internetConnectivityManager.isNetworkAvailable.value)
             .onEach { dataState ->
                 loading.value = dataState.loading
                 dataState.data?.let { list ->
@@ -114,14 +116,6 @@ constructor(
                     Log.e(TAG, "newSearch: $error")
                     dialogQueue.appendErrorMessage(
                         "Error",
-                        error
-                    )
-                    dialogQueue.appendErrorMessage(
-                        "Another Error",
-                        error
-                    )
-                    dialogQueue.appendErrorMessage(
-                        "Third Error",
                         error
                     )
                 }
@@ -137,7 +131,7 @@ constructor(
             increasePage()
             if (page.value > 1) {
                 loading.value = true
-                searchRecipes.execute(token = token, page = page.value, query = query.value)
+                searchRecipes.execute(token = token, page = page.value, query = query.value,internetConnectivityManager.isNetworkAvailable.value)
                     .onEach { dataState ->
                         loading.value = dataState.loading
                         dataState.data?.let { list ->
